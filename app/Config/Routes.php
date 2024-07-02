@@ -37,16 +37,24 @@ use CodeIgniter\Router\RouteCollection;
     
     //untuk keranjang
     //$routes->get('keranjang', 'TransaksiController::index', ['filter' => 'auth']);
-    $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
-        $routes->get('', 'TransaksiController::index');
-        $routes->post('', 'TransaksiController::cart_add');
-        $routes->post('edit', 'TransaksiController::cart_edit');
-        $routes->get('delete/(:any)', 'TransaksiController::cart_delete/$1');
-        $routes->get('clear', 'TransaksiController::cart_clear');
-    });
+        $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
+            $routes->get('', 'TransaksiController::index');
+            $routes->post('', 'TransaksiController::cart_add');
+            $routes->post('edit', 'TransaksiController::cart_edit');
+            $routes->get('delete/(:any)', 'TransaksiController::cart_delete/$1');
+            $routes->get('clear', 'TransaksiController::cart_clear');
+        });
 
+    // untuk transaksi beli dan checkout
+        $routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
+        $routes->get('getcity', 'TransaksiController::getcity', ['filter' => 'auth']);
+        $routes->get('getcost', 'TransaksiController::getcost', ['filter' => 'auth']);
+        $routes->get('buy', 'TransaksiController::buy', ['filter' => 'auth']);
 
-//halaman login sebagai auth, menampilkan semua konten
+    // menu profil
+    $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
+
+    //halaman login sebagai auth, menampilkan semua konten
     $routes->get('faq', 'Home::faq', ['filter' => 'auth']);
     $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
     $routes->get('contact', 'Home::contact', ['filter' => 'auth']);

@@ -30,6 +30,7 @@
         <?php
         }
         ?>
+        
 
         <li class="nav-item">
             <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">

@@ -52,13 +52,21 @@
     </table>
 
 <!-- End Table with stripped rows -->
+
+    <!-- Mengubah nilai menjadi Rupiah -->
     <div class="alert alert-info">
         <?php echo "Total = " . number_to_currency($total, 'IDR') ?>
     </div>
 
+    <!-- Tombol Perbarui Keranjang-->
     <button type="submit" class="btn btn-primary">Perbarui Keranjang</button>
-
+    <!-- Kosongkan Keranjang -->
     <a class="btn btn-warning" href="<?php echo base_url() ?>keranjang/clear">Kosongkan Keranjang</a>
 
+    <!-- Tombol Selesai  -->
+    <?php if (!empty($items)) : ?>
+    <a class="btn btn-success" href="<?php echo base_url() ?>checkout">Selesai Belanja</a>
+    <?php endif; ?>
+    
 <?php echo form_close() ?>
 <?= $this->endSection() ?>
