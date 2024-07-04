@@ -29,9 +29,7 @@ class TransaksiController extends BaseController
 
     public function index()
     {
-        if (is_null($this->cart)) {
-            return redirect()->to(base_url('error'))->with('error', 'Cart service is not     available.');
-        }
+
         $data['items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
         return view('v_keranjang', $data);
@@ -39,9 +37,7 @@ class TransaksiController extends BaseController
 
     public function cart_add()
     {
-        if (is_null($this->cart)) {
-            return redirect()->to(base_url('error'))->with('error', 'Cart service is not available.');
-        }
+
         $this->cart->insert(array(
             'id'        => $this->request->getPost('id'),
             'qty'       => 1,
@@ -94,11 +90,12 @@ class TransaksiController extends BaseController
     {
         $data['items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
-        $this->cart->contents();
-        $this->cart->total();
+        $provinsi = $this->rajaongkir('province');
+        $data['provinsi'] = json_decode($provinsi)->rajaongkir->results;
 
         return view('v_checkout', $data);
     }
+
 
     public function getCity()
     {
@@ -220,7 +217,7 @@ class TransaksiController extends BaseController
             return redirect()->to(base_url('profile'));
         }
     }
-    
+
     public function profile()
     {
         $username = session()->get('username');

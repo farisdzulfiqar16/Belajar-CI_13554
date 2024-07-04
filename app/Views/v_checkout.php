@@ -18,16 +18,6 @@
         </div>
 
         <div class="col-12">
-            <label for="provinsi" class="form-label">Provinsi</label>
-            <select class="form-select" id="provinsi">
-                <option>Silakan pilih provinsi</option>
-                <?php foreach ($provinsi as $p) : ?>
-                    <option value="<?= $p->province_id ?>"><?= $p->province ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-
-        <div class="col-12">
             <label for="kabkota" class="form-label">Kab/Kota</label>
             <select class="form-select" id="kabupaten">
                 <option>Silakan pilih Kab/Kota</option>
@@ -45,6 +35,7 @@
             <label for="ongkir" class="form-label">Ongkir</label>
             <input type="text" class="form-control" id="ongkir" name="ongkir" readonly>
         </div>
+
 
     </div>
     <div class="col-lg-6">

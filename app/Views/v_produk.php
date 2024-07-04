@@ -30,7 +30,7 @@
         </button>
 
     <!-- tombol download data -->
-        <a type="button" class="btn btn-success" href="<?base_url()?>produk/donwload">
+        <a type="button" class="btn btn-success" href="<?= base_url()?>produk/download">
             Download Data
         </a>
 
