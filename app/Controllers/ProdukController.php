@@ -28,6 +28,38 @@ class ProdukController extends BaseController
     //untuk membuat data
     public function create()
     {
+        // form validasi
+        $validation = \Config\Services::validation();
+
+        // pesan kesalahan
+        $validation->setRules([
+            'nama' => [
+                'rules' => 'required|min_length[5]',
+                'errors' => [
+                    'required' => 'Gagal, bidang nama harus diisi.',
+                    'min_length' => 'Gagal, bidang nama harus 5 karakter atau lebih.'
+                ]
+            ],
+            'harga' => [
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'Gagal, bidang harga harus diisi.',
+                    'numeric' => 'Gagal, bidang harga harus berisi angka.'
+                ]
+            ],
+            'jumlah' => [
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'Gagal, bidang jumlah harus diisi.',
+                    'numeric' => 'Gagal, bidang jumlah harus berisi angka.'
+                ]
+            ]
+        ]);
+
+        if (!$this->validate($validation->getRules())) {
+            return redirect()->back()->withInput()->with('failed', $validation->getErrors());
+        }
+
         $dataFoto = $this->request->getFile('foto');
 
         $dataForm = [
@@ -48,9 +80,43 @@ class ProdukController extends BaseController
         return redirect('produk')->with('success', 'Data Berhasil Ditambah');
     }
 
+
+
     //untuk edit data
     public function edit($id)
     {
+        // form validasi
+        $validation = \Config\Services::validation();
+
+        // menampilkan pesan kesalahan pada kode
+        $validation->setRules([
+            'nama' => [
+                'rules' => 'required|min_length[5]',
+                'errors' => [
+                    'required' => 'Gagal, bidang nama harus diisi.',
+                    'min_length' => 'Gagal, bidang nama harus 5 karakter atau lebih.'
+                ]
+            ],
+            'harga' => [
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'Gagal, bidang harga harus diisi.',
+                    'numeric' => 'Gagal, bidang harga harus berisi angka.'
+                ]
+            ],
+            'jumlah' => [
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'Gagal, bidang jumlah harus diisi.',
+                    'numeric' => 'Gagal, bidang jumlah harus berisi angka.'
+                ]
+            ]
+        ]);
+
+        if (!$this->validate($validation->getRules())) {
+            return redirect()->back()->withInput()->with('failed', $validation->getErrors());
+        }
+
         $dataProduk = $this->product->find($id);
 
         $dataForm = [
@@ -78,6 +144,8 @@ class ProdukController extends BaseController
 
         return redirect('produk')->with('success', 'Data Berhasil Diubah');
     }
+
+
 
     //untuk menghapus data 
     public function delete($id)

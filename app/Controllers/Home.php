@@ -35,6 +35,12 @@ class Home extends BaseController
     {
         return view('v_faq');
     }
+    
+    public function transaksi()
+    {
+        return view('v_transaksi');
+    }
+
 
     public function profile()
     {
@@ -61,8 +67,15 @@ class Home extends BaseController
         return view('v_profile', $data);
     }
 
+    
     public function contact()
     {
         return view('v_contact');
+    }
+    
+    public function accountSettings()
+    {
+        // Load view untuk halaman pengaturan akun
+        return view('v_account_settings');
     }
 }

@@ -13,47 +13,53 @@ use App\Models\TransactionDetailModel;
 
 class ApiController extends ResourceController
 {
-    protected $apiKey = "ef635XbLi09420MgcvNp00";
-    protected $user;
-    protected $transaction; 
-    protected $transaction_detail;
 
-    function __construct()
+    protected $apiKey = 'ef635XbLi09420MgcvNp00';
+    protected $transaction;
+    protected $user;
+
+    public function __construct()
     {
-        $this->user = new UserModel();
-        $this->transaction = new TransactionModel();
-        $this->transaction_detail = new TransactionDetailModel();
+        $this->transaction = new \App\Models\TransactionModel();
+        $this->user = new \App\Models\UserModel();
     }
 
     public function monthly()
     {
-
         $data = [
             'query' => [],
             'results' => [],
             'status' => ["code" => 401, "description" => "Unauthorized"]
         ];
 
-        $headers = $this->request->headers();
+        $headers = $this->request->getHeaders();
         $postData = $this->request->getPost();
 
         $data['query'] = $postData;
 
-        array_walk($headers, function (&$value, $key) {
-            $value = $value->getValue();
-        });
+        // Convert headers to array
+        $headersArray = [];
+        foreach ($headers as $key => $header) {
+            $headersArray[$key] = $header->getValue();
+        }
 
-        if ($headers["Key"] == $this->apiKey) {
-            if ($postData['type'] == 'transaction') {
-                $result = $this->transaction->select('COUNT(*) as jml')->like('created_at', '' . $postData['tahun'] . '-' . $postData['bulan'] . '', 'after')->first();
-                $data['results'] = $result;
-                $data['status'] = ["code" => 200, "description" => "OK"];
-            } elseif ($postData['type'] == 'earning') {
-                $result = $this->transaction->select('sum(total_harga) as jml')->like('created_at', '' . $postData['tahun'] . '-' . $postData['bulan'] . '', 'after')->first();
-                $data['results'] = $result;
-                $data['status'] = ["code" => 200, "description" => "OK"];
-            } elseif ($postData['type'] == 'user') {
-                $result = $this->user->select('COUNT(*) as jml')->like('created_at', '' . $postData['tahun'] . '-' . $postData['bulan'] . '', 'after')->first();
+        if (isset($headersArray["Key"]) && $headersArray["Key"] == $this->apiKey) {
+            $tahun = $postData['tahun'] ?? null;
+            $bulan = $postData['bulan'] ?? null;
+            $type = $postData['type'] ?? null;
+
+            if ($tahun && $type) {
+                if ($type == 'transaction') {
+                    $dateCondition = $bulan ? $tahun . '-' . $bulan . '%' : $tahun . '%';
+                    $result = $this->transaction->select('COUNT(*) as jml')->like('created_at', $dateCondition, 'after')->first();
+                } elseif ($type == 'earning') {
+                    $dateCondition = $bulan ? $tahun . '-' . $bulan . '%' : $tahun . '%';
+                    $result = $this->transaction->select('SUM(total_harga) as jml')->like('created_at', $dateCondition, 'after')->first();
+                } elseif ($type == 'user') {
+                    $dateCondition = $bulan ? $tahun . '-' . $bulan . '%' : $tahun . '%';
+                    $result = $this->user->select('COUNT(*) as jml')->like('created_at', $dateCondition, 'after')->first();
+                }
+
                 $data['results'] = $result;
                 $data['status'] = ["code" => 200, "description" => "OK"];
             }
@@ -61,6 +67,50 @@ class ApiController extends ResourceController
 
         return $this->respond($data);
     }
+
+    public function yearly()
+    {
+        $data = [
+            'query' => [],
+            'results' => [],
+            'status' => ["code" => 401, "description" => "Unauthorized"]
+        ];
+
+        $headers = $this->request->getHeaders();
+        $postData = $this->request->getPost();
+
+        $data['query'] = $postData;
+
+        // Convert headers to array
+        $headersArray = [];
+        foreach ($headers as $key => $header) {
+            $headersArray[$key] = $header->getValue();
+        }
+
+        if (isset($headersArray["Key"]) && $headersArray["Key"] == $this->apiKey) {
+            $tahun = $postData['tahun'] ?? null;
+            $type = $postData['type'] ?? null;
+
+            if ($tahun && $type) {
+                if ($type == 'transaction') {
+                    $result = $this->transaction->select('COUNT(*) as jml')->like('created_at', $tahun . '%', 'after')->first();
+                } elseif ($type == 'earning') {
+                    $result = $this->transaction->select('SUM(total_harga) as jml')->like('created_at', $tahun . '%', 'after')->first();
+                } elseif ($type == 'user') {
+                    $result = $this->user->select('COUNT(*) as jml')->like('created_at', $tahun . '%', 'after')->first();
+                }
+
+                $data['results'] = $result;
+                $data['status'] = ["code" => 200, "description" => "OK"];
+            }
+        }
+
+        return $this->respond($data);
+    }
+
+
+
+
     /**
      * Return an array of resource objects, themselves in array format.
      *

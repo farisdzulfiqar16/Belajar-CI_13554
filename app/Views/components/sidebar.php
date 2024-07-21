@@ -27,6 +27,13 @@
                     <span>Produk</span>
                 </a>
             </li><!-- End Produk Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link <?php echo (uri_string() == 'transaksi') ? "" : "collapsed" ?>" href="transaksi">
+                    <i class="bi bi-receipt"></i>
+                    <span>Transaksi</span>
+                </a>
+            </li>
         <?php
         }
         ?>

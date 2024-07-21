@@ -17,6 +17,16 @@
             <input type="text" class="form-control" id="alamat" name="alamat">
         </div>
 
+        <div>
+        <label for="provinsi" class="form-label">Provinsi</label>
+            <select class="form-select" id="provinsi">
+                <option>Silakan pilih provinsi</option>
+                <?php foreach ($provinsi as $p) : ?>
+                    <option value="<?= $p->province_id ?>"><?= $p->province ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+
         <div class="col-12">
             <label for="kabkota" class="form-label">Kab/Kota</label>
             <select class="form-select" id="kabupaten">

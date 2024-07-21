@@ -17,7 +17,7 @@
         $data = file_get_contents($path);
 
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data); //error
-     
+
 
     ?>
         <tr>
@@ -26,12 +26,12 @@
             <td align="right"><?= "Rp " . number_format($produk['harga'], 2, ",", ".") ?></td>
             <td align="center"><?= $produk['jumlah'] ?></td>
             <td align="center">
-            
+
                 <img src="<?= $base64 ?>" width="50px"> <!-- error -->
-            
+
             </td>
         </tr>
     <?php endforeach; ?>
-    
+
 </table>
 Downloaded on <?= date("Y-m-d H:i:s") ?>

@@ -6,7 +6,7 @@ use App\Database\Migrations\Transaction;
 use CodeIgniter\Controller;
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
-
+use Dompdf\Dompdf;
 
 class TransaksiController extends BaseController
 {
@@ -33,6 +33,23 @@ class TransaksiController extends BaseController
         $data['items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
         return view('v_keranjang', $data);
+    }
+
+    public function transaksi()
+    {
+        $data['transactions'] = $this->transaction->findAll();
+        return view('v_transaksi', $data);
+    }
+
+
+    public function updateStatus($id)
+    {
+        $status = $this->request->getPost('status');
+        // Pastikan transaksi->update ada dan didefinisikan di model Anda
+        $this->transaction->update($id, ['status' => $status]);
+
+        return redirect()->back()->with('status_updated', 'Status Berhasil Diubah');
+
     }
 
     public function cart_add()
@@ -241,5 +258,29 @@ class TransaksiController extends BaseController
         $data['product'] = $product;
 
         return view('v_profile', $data);
+    }
+
+    public function download()
+    {
+        $transactions = $this->transaction->findAll();
+
+        $html = view('v_transaksiPDF', ['transactions' => $transactions]);
+
+        $filename = date('y-m-d-H-i-s') . '-transaksi';
+
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+
+        // load HTML content
+        $dompdf->loadHtml($html);
+
+        // (optional) setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // render html as PDF
+        $dompdf->render();
+
+        // output the generated pdf
+        $dompdf->stream($filename);
     }
 }

@@ -2,25 +2,36 @@
 <?= $this->section('content') ?>
 
 <!-- menampilkan form tambah data baru -->
-    <?php
-    if (session()->getFlashData('success')) {
-    ?>
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <?= session()->getFlashData('success') ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+<?php
+if (session()->getFlashData('success')) {
+?>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <?= session()->getFlashData('success') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 <?php
 }
 ?>
-    <?php
-    if (session()->getFlashData('failed')) {
-    ?>
 
+<?php
+if (session()->getFlashData('failed')) {
+?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <?= session()->getFlashData('failed') ?>
+        <?php 
+        $errors = session()->getFlashData('failed');
+        if (is_array($errors)) {
+            echo '<ul>';
+            foreach ($errors as $error) {
+                echo '<li>' . $error . '</li>';
+            }
+            echo '</ul>';
+        } else {
+            echo $errors;
+        }
+        ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-
+    
 <?php
 }
 ?>

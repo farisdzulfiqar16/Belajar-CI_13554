@@ -56,4 +56,11 @@ class AuthController extends BaseController
 
         return view('v_login');
     }
+    
+    //logout
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/login');
+    }
 }
